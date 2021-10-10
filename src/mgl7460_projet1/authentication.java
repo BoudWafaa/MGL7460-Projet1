@@ -1,6 +1,5 @@
 package mgl7460_projet1;
 
-
 import java.sql.*;
 import java.util.*;
 
@@ -17,7 +16,7 @@ public class authentication {
 		    ps.setString(3, password);
 		    ps.setString(4, roles);
 		    ps.execute();
-		    System.out.println("Data has been inserted!");
+		    System.out.println("User has been inserted!");
 		  } catch(SQLException e) {
 		    System.out.println(e.toString());
 		  } finally {
@@ -28,26 +27,35 @@ public class authentication {
 		      System.out.println(e.toString());
 		    }		    
 		  }
+		  
   }
 	
 	
-	public static void login() throws SQLException {
-		  Connection con = databaseConnection.connect();
-		  Statement stmt = con.createStatement(); 
-		  Scanner sc = new Scanner(System.in);  
-		  System.out.print("Username : ");  
-		  String str1 = sc.next();  
-		  System.out.print("Password : ");  
-		  String str2 = sc.next();  
-		  ResultSet rs = stmt.executeQuery("select * from users where username='" + str1 + "' and password='" + str2 + "'");  
-		  if (rs.next())  
-		   System.out.println("Welcome::: " + str1);  
-		  else  
-		   System.out.println("Invalid username and password");  
-		  con.close(); 
+	public static String login() throws SQLException {
+		Connection con = databaseConnection.connect(); 
+		Statement stmt = con.createStatement();  
+		   
+		Scanner sc = new Scanner(System.in);  
+		System.out.print("Username : ");  
+		String str1 = sc.next();  
+		System.out.print("Password : ");  
+		String str2 = sc.next();  
+		ResultSet rs = stmt.executeQuery("select * from users where username='" + str1 + "' and password='" + str2 + "'");  
 		  
-		  
-		}//end method login
+		if (rs.next())   {
+			String roles = rs.getString(5); 
+			System.out.println("Bienvenue::: " + str1 );
+			con.close();
+			return roles;
+		 } else  
+			System.out.println("Nom d'utilisateur ou mot de passe invalides"); 
+			con.close();
+			return "InvalidUser";
+			  
+		 }//end method login
+	
+	
+	
 	
 	
 }// end class
