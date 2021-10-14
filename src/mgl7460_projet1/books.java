@@ -6,27 +6,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class library {
-
-	public static void insertLibrary() {
+public class books {
+	public static void insertBook() {
 		Connection con = databaseConnection.connect();
 		PreparedStatement ps = null;
 		Scanner sc = new Scanner(System.in);
-		System.out.print("Nom librairie : ");
-		String name = sc.next();
-		System.out.print("Adresse : ");
-		String address = sc.next();
-		System.out.print("Numéro de téléphone : ");
-		String phoneNumber = sc.next();
+		System.out.print("Titre du livre : ");
+		String title = sc.next();
+		System.out.print("Auteur : ");
+		String author = sc.next();
 
 		try {
-			String sql = "INSERT INTO library(name, address, phone) VALUES(?,?,?) ";
+			String sql = "INSERT INTO books(title, author) VALUES(?,?) ";
 			ps = con.prepareStatement(sql);
-			ps.setString(1, name);
-			ps.setString(2, address);
-			ps.setString(3, phoneNumber);
+			ps.setString(1, title);
+			ps.setString(2, author);
 			ps.execute();
-			System.out.println("La librairie a été insérée.");
+			System.out.println("Le livre a été insérée.");
 		} catch (SQLException e) {
 			System.out.println(e.toString());
 		} finally {
@@ -40,18 +36,18 @@ public class library {
 		}
 	} // end method
 
-	public static void deleteLibrary() {
+	public static void deleteBook() {
 		Connection con = databaseConnection.connect();
 		PreparedStatement ps = null;
 		try {
-			String sql = "delete from library WHERE name = ? ";
+			String sql = "delete from books WHERE title = ? ";
 			ps = con.prepareStatement(sql);
 			Scanner sc = new Scanner(System.in);
-			System.out.print("Nom librairie que vous voulez supprimer : ");
-			String name = sc.next();
-			ps.setString(1, name);
+			System.out.print("Titre du livre que vous voulez supprimer : ");
+			String title = sc.next();
+			ps.setString(1, title);
 			ps.execute();
-			System.out.println("Librairie a bien été supprimer");
+			System.out.println("Le livre a bien été supprimer");
 			sc.close();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -69,24 +65,22 @@ public class library {
 		}
 	} // end method
 
-	public static void allLibrary() {
+	public static void allBooks() {
 		Connection con = databaseConnection.connect();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			String sql = "SELECT * FROM library";
+			String sql = "SELECT * FROM books";
 			ps = con.prepareStatement(sql);
 			rs = ps.executeQuery();
-			System.out.println("Liste des librariries");
+			System.out.println("Liste des livres");
 			while (rs.next()) {
-				String name = rs.getString("name");
-				String address = rs.getString("address");
-				String phone = rs.getString("phone");
+				String title = rs.getString("title");
+				String author = rs.getString("author");
 
-				System.out.println("Nom: " + name);
-				System.out.println("Adresse: " + address);
-				System.out.println("Numéro de téléphone: " + phone);
+				System.out.println("Titre du livre: " + title);
+				System.out.println("Auteur: " + author);
 				System.out.println();
 				System.out.println("************************");
 				System.out.println();
@@ -103,27 +97,25 @@ public class library {
 				System.out.println(e.toString());
 			}
 		}
+
 	} // end method
 
-	public static void updateLibrary() {
+	public static void updateBook() {
 		Connection con = databaseConnection.connect();
 		PreparedStatement ps = null;
 		try {
-			String sql = "UPDATE library set name = ?, address = ?, phone = ? WHERE name = ? ";
+			String sql = "UPDATE books set title = ?, author = ? WHERE title = ? ";
 			ps = con.prepareStatement(sql);
 			Scanner sc = new Scanner(System.in);
-			System.out.print("Nom librairie que vou voulez moodifier : ");
-			String name = sc.next();
-			System.out.print("Nouveau nom de la librairie : ");
-			String name2 = sc.next();
-			System.out.print("Adresse : ");
-			String address = sc.next();
-			System.out.print("Numéro de téléphone : ");
-			String phoneNumber = sc.next();
-			ps.setString(1, name2);
-			ps.setString(2, address);
-			ps.setString(3, phoneNumber);
-			ps.setString(4, name);
+			System.out.print("Titre du livre que vou voulez moodifier : ");
+			String title = sc.next();
+			System.out.print("Nouveau titre du livre: ");
+			String title2 = sc.next();
+			System.out.print("Auteur : ");
+			String author = sc.next();
+			ps.setString(1, title2);
+			ps.setString(2, author);
+			ps.setString(3, title);
 			ps.execute();
 			System.out.println("Data has been updated");
 			sc.close();
@@ -131,9 +123,10 @@ public class library {
 			// TODO: handle exception
 			System.out.println(e.toString());
 		}
+
 	} // end method
 
-	public static void searchLibrary() {
+	public static void searchBook() {
 		Connection con = databaseConnection.connect();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -146,7 +139,6 @@ public class library {
 			ps = con.prepareStatement(sql);
 			rs = ps.executeQuery();
 			System.out.println("Liste des librariries");
-			sc.close();
 			while (rs.next()) {
 				String name2 = rs.getString("name");
 				String address = rs.getString("address");
@@ -160,6 +152,7 @@ public class library {
 				System.out.println();
 
 			}
+			sc.close();
 		} catch (SQLException e) {
 			System.out.println(e.toString());
 		} finally {
@@ -173,5 +166,4 @@ public class library {
 		}
 
 	} // end method
-
 }
